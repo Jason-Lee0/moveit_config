@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: r12_config
+    relative_path: config/r12.urdf
+  srdf:
+    relative_path: config/r12.srdf
+  package_settings:
+    author_name: jason
+    author_email: jasonch.lee@adlinktech.com
+    generated_timestamp: 1693277452
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
