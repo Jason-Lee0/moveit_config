@@ -19,7 +19,8 @@ enum Button
    RIGHT_STICK_CLICK = 10
  };
 
-char c,input;
+int_fast8_t c,input;
+
 
 
 std::map<std::string, double> joints1, joints2, joints3, joints4, joints5;
@@ -27,9 +28,10 @@ std::map<std::string, double> joints1, joints2, joints3, joints4, joints5;
 
 void topic_callback(const sensor_msgs::msg::Joy::ConstSharedPtr& msg)
 {
-   if(msg->buttons[LEFT_STICK_CLICK]){c='a';}
-   if(msg->buttons[RIGHT_STICK_CLICK]){c='b';}
-   if(msg->buttons[HOME]){c='e';}
+   if(msg->buttons[LEFT_STICK_CLICK]){c=0;}
+   if(msg->buttons[RIGHT_STICK_CLICK]){c=1;}
+   if(msg->buttons[HOME]){c=2;}
+   if(msg->buttons[MENU] || msg->buttons[LEFT_BUMPER]){c=3;}
 
     
 }
@@ -123,24 +125,29 @@ int main(int argc, char* argv[])
         if (input != c)
         {
             input = c;
+            
 
-            if (c == 'a')
+            if (c == 0)
             {
 
                 //current_state->copyJointGroupPositions(joint_model_group, joints1);
+
                 move_group_interface.setJointValueTarget(joints1);
                
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
-                move_group_interface.move();
+                move_group_interface.asyncMove();
+                
             }
-            else if (c == 'b')
+            else if (c == 1)
             {
                 //current_state->copyJointGroupPositions(joint_model_group, joints2);
+
                 move_group_interface.setJointValueTarget(joints2);
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
-                move_group_interface.move();
+                move_group_interface.asyncMove();
+                
             }
-            else if (c == 'c')
+            /*else if (c == 'c')
             {
                 //current_state->copyJointGroupPositions(joint_model_group, joints3);
                 move_group_interface.setJointValueTarget(joints3);
@@ -154,15 +161,18 @@ int main(int argc, char* argv[])
                 move_group_interface.setJointValueTarget(joints4);
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
                 move_group_interface.asyncMove();
-            }
+            }*/
 
-            else if (c == 'e')
+            else if (c == 2)
             {
                 //current_state->copyJointGroupPositions(joint_model_group, joints5);
+
                 move_group_interface.setJointValueTarget(joints5);
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
-                move_group_interface.move();
+                move_group_interface.asyncMove();
+                
             }
+            
 
 
         }
