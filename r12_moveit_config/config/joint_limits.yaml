@@ -32,8 +32,3 @@ joint_limits:
     max_velocity: 2.5
     has_acceleration_limits: true
     max_acceleration: 2.5
-  final_joint:
-    has_velocity_limits: true
-    max_velocity: 2.5
-    has_acceleration_limits: true
-    max_acceleration: 2.5

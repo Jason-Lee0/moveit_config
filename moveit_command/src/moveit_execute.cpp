@@ -2,8 +2,22 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <moveit/move_group_interface/move_group_interface.h>
+#include <sensor_msgs/msg/joy.hpp>
 
-#include <adlink_msg/msg/keyboard.hpp>
+enum Button
+ {
+   A = 0,
+   B = 1,
+   X = 2,
+   Y = 3,
+   LEFT_BUMPER = 4,
+   RIGHT_BUMPER = 5,
+   CHANGE_VIEW = 6,
+   MENU = 7,
+   HOME = 8,
+   LEFT_STICK_CLICK = 9,
+   RIGHT_STICK_CLICK = 10
+ };
 
 char c,input;
 
@@ -11,9 +25,12 @@ char c,input;
 std::map<std::string, double> joints1, joints2, joints3, joints4, joints5;
 
 
-void topic_callback(const adlink_msg::msg::Keyboard msg)
+void topic_callback(const sensor_msgs::msg::Joy::ConstSharedPtr& msg)
 {
-    c = msg.keyboard_command;
+   if(msg->buttons[LEFT_STICK_CLICK]){c='a';}
+   if(msg->buttons[RIGHT_STICK_CLICK]){c='b';}
+   if(msg->buttons[HOME]){c='e';}
+
     
 }
 
@@ -25,7 +42,7 @@ int main(int argc, char* argv[])
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
   auto move_group_node = rclcpp::Node::make_shared("hello_moveit", node_options);
-auto Sub = move_group_node -> create_subscription<adlink_msg::msg::Keyboard>("adlink_msg/keyboard",10,topic_callback);
+  auto Sub = move_group_node -> create_subscription<sensor_msgs::msg::Joy>("/joy",10,topic_callback);
 
 
   
@@ -96,6 +113,10 @@ auto Sub = move_group_node -> create_subscription<adlink_msg::msg::Keyboard>("ad
   rclcpp::WallRate loop_rate(10);
 
   input = 0;
+
+  auto end_link = move_group_interface.getEndEffectorLink();
+  std::cout<< "end_link : " << end_link <<std::endl;
+
   while (rclcpp::ok())
   {
         
@@ -110,14 +131,14 @@ auto Sub = move_group_node -> create_subscription<adlink_msg::msg::Keyboard>("ad
                 move_group_interface.setJointValueTarget(joints1);
                
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
-                move_group_interface.asyncMove();
+                move_group_interface.move();
             }
             else if (c == 'b')
             {
                 //current_state->copyJointGroupPositions(joint_model_group, joints2);
                 move_group_interface.setJointValueTarget(joints2);
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
-                move_group_interface.asyncMove();
+                move_group_interface.move();
             }
             else if (c == 'c')
             {
@@ -140,7 +161,7 @@ auto Sub = move_group_node -> create_subscription<adlink_msg::msg::Keyboard>("ad
                 //current_state->copyJointGroupPositions(joint_model_group, joints5);
                 move_group_interface.setJointValueTarget(joints5);
                 printf("pub_time: %f\n",rclcpp::Clock{RCL_ROS_TIME}.now().seconds());
-                move_group_interface.asyncMove();
+                move_group_interface.move();
             }
 
 

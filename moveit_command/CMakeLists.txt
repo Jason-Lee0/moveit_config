@@ -9,7 +9,8 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(adlink_msg REQUIRED)
+find_package(moveit_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 add_executable(moveit_command src/moveit_execute.cpp)
 target_include_directories(moveit_command PUBLIC
@@ -20,12 +21,30 @@ ament_target_dependencies(
   moveit_command
   "moveit_ros_planning_interface"
   "rclcpp"
-  "adlink_msg"
+  "moveit_msgs"
+
 )
 
 install(TARGETS moveit_command
   DESTINATION lib/${PROJECT_NAME})
 
+
+add_executable(moveit_path src/moveit_path.cpp)
+target_include_directories(moveit_path PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+target_compile_features(moveit_path PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+ament_target_dependencies(
+    moveit_path
+    "moveit_ros_planning_interface"
+    "rclcpp"
+    "moveit_msgs"
+    "geometry_msgs"
+  
+  )
+  
+install(TARGETS moveit_path
+    DESTINATION lib/${PROJECT_NAME})  
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

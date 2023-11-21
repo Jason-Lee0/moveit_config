@@ -30,8 +30,8 @@ def launch_setup(context, *args, **kwargs):
 
     moveit_config = (
         MoveItConfigsBuilder("r12", package_name="r12_move_config")
-        .robot_description(file_path="/home/ros/arm_ws/install/r12_move_config/share/r12_move_config/config/r12.urdf.xacro")
-        .trajectory_execution(file_path="/home/ros/arm_ws/install/r12_move_config/share/r12_move_config/config/moveit_controllers.yaml")
+        .robot_description(file_path="/home/ros/ros_wrapper/install/r12_move_config/share/r12_move_config/config/r12.urdf.xacro")
+        .trajectory_execution(file_path="/home/ros/ros_wrapper/install/r12_move_config/share/r12_move_config/config/moveit_controllers.yaml")
         .planning_scene_monitor(
             publish_robot_description=True, publish_robot_description_semantic=True
         )
@@ -60,7 +60,7 @@ def launch_setup(context, *args, **kwargs):
         executable="rviz2",
         name="rviz2",
         output="log",
-        arguments=["-d", "/home/ros/arm_ws/install/r12_move_config/share/r12_move_config/config/moveit.rviz"],
+        arguments=["-d", "/home/ros/ros_wrapper/install/r12_move_config/share/r12_move_config/config/moveit.rviz"],
         parameters=[
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,

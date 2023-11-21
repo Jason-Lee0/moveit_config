@@ -14,11 +14,14 @@
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-  
-  <build_depend>adlink_msg</build_depend>
-  <exec_depend>adlink_msg</exec_depend>
-  <member_of_group>adlink_msg</member_of_group>
-	
+
+  <build_depend>moveit_msgs</build_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <member_of_group>moveit_msgs</member_of_group>
+
+  <build_depend>geometry_msgs</build_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <member_of_group>geometry_msgs</member_of_group>	
 
   <export>
     <build_type>ament_cmake</build_type>
